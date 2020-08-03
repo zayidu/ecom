@@ -2,11 +2,13 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from rest_framework.decorators import authentication_classes, permission_classes
 
-from .models import CustomUser 
+from .models import CustomUser
 
 # class CategorySerializer(serializers.Serializer):
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    
+
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
@@ -15,7 +17,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
-  
 
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():
@@ -26,8 +27,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         instance.save()
         return instance
-    
+
     class Meta:
         model = CustomUser
-        extra_kwargs = {'password': {'write_only':True}}
-        fields = ('name', 'email', 'password', 'phone', 'gender', 'is_active', 'is_staff' , 'is_superuser')
+        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('name', 'email', 'password', 'phone', 'gender',
+                  'is_active', 'is_staff', 'is_superuser')
